@@ -139,7 +139,7 @@ export default function Card({ initialOrder, statuses }) {
               width: `${((currentStatusIndex + 1) / statuses.length) * 100}%`,
             }}
           >
-            {order.status?.name || 'N/A'}
+            {order.status?.label || 'N/A'}
           </div>
         </div>
       </div>
@@ -170,7 +170,7 @@ export default function Card({ initialOrder, statuses }) {
               </div>
             )}
             <span className={`mt-1 text-sm ${index <= currentStatusIndex ? 'text-blue-700 font-bold' : ''}`}>
-              {status.name}
+              {status.label}
             </span>
           </div>
         ))}

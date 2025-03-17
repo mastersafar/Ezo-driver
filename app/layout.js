@@ -1,7 +1,17 @@
+
 import "./globals.css";
 import Header from "@/components/Navigator/header";
+import NotificationHandler from "@/components/NotificationHandler";
+
 import { cookies } from "next/headers"; // Import Next.js headers
 import { Cairo } from "next/font/google";
+import PWAInstaller from "@/components/PWAInstaller"; // ✅ Import PWAInstaller
+import { Toaster } from "react-hot-toast";
+
+import { registerServiceWorker } from "@/services/firebase";
+import ServiceWorkerRegister from "@/components/ServiceWorkerRegister"; // ✅ Import the new component
+
+
 
 const roboto = Cairo({
   weight: ["500"],
@@ -10,8 +20,8 @@ const roboto = Cairo({
 });
 
 export const metadata = {
-  title: "dummy website",
-  description: "this is for isom",
+  title: "Ezo Driver",
+  description: "This is for Ezo Driver app",
 };
 
 export default function RootLayout({ children }) {
@@ -19,16 +29,22 @@ export default function RootLayout({ children }) {
   const token = cookies().get("token")?.value;
 
   return (
-    <html lang="en" dir="rtl" className={`${roboto.variable} `}>
+    <html lang="ar" dir="rtl" className={`${roboto.variable}`}>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+      </head>
       <body className="font-cairo">
-        {/* Render Header only if token exists */}
-        {token && <Header>{children}</Header>}
-        
-        
+        <PWAInstaller /> {/* ✅ Ensure PWAInstaller runs globally */}
+        <Toaster position="top-right" reverseOrder={false} />
 
-        {!token &&<div >
-          {children}
-        </div>}
+        <NotificationHandler />
+
+        
+        {token ? (
+          <Header>{children}</Header>
+        ) : (
+          <div>{children}</div>
+        )}
       </body>
     </html>
   );
