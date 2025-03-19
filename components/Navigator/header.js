@@ -15,11 +15,9 @@ export default function Header({ children }) {
 
   const navigationLinks = [
     { href: '/dashboard', label: 'الرئيسية' },
-
-    { href: '/proces', label: 'قائمة الرحلات' },
+    { href: '/ordersMenu', label: 'قائمة الرحلات' },
     { href: '/activeOrders', label: 'متابعة الرحلات' },
-    { href: '/order', label: 'كشف حساب' },
-    //{ href: '/dump', label: 'Dump' },
+    { href: '/account', label: 'كشف حساب' },
   ];
 
   const isActive = (href) => (path === href || path.startsWith(href) ? 'bg-sky-600 hover:bg-sky-600/80 font-bold' : '');

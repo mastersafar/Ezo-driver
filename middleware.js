@@ -7,8 +7,12 @@ export function middleware(request) {
   console.log('Pathname:', pathname); // Debugging: Log the current path
   console.log('Token:', token?.value); // Debugging: Log the token value
 
+
     // Redirect unauthenticated users trying to access protected routes
-  if (!token?.value && (pathname.startsWith('/dashboard') || pathname === '/about')) {
+  if (!token?.value && (pathname.startsWith('/dashboard') 
+      || pathname === '/ordersMenu'
+      || pathname === '/activeOrders'
+      || pathname === '/account')) {
     console.log('No token found, redirecting to /login');
     return NextResponse.redirect(new URL('/login', request.url));
   }

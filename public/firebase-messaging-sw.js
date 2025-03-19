@@ -1,3 +1,6 @@
+const SW_VERSION = "1.2.0"; // Change this version number
+
+
 importScripts("https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging-compat.js");
 
@@ -27,21 +30,81 @@ messaging.onBackgroundMessage((payload) => {
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-// ✅ Handle Notification Click Event
-self.addEventListener("notificationclick", function (event) {
-  console.log("🔔 Notification clicked:", event.notification);
 
-  event.notification.close();
-  
+
+self.addEventListener("push", function (event) {
+  console.log("Push event received!", event);
+
+  const notificationData = event.data.json();
+  const notificationTitle = notificationData.notification.title;
+  const notificationOptions = {
+      body: notificationData.notification.body,
+      icon: "/logo.png",
+      data: notificationData.data
+  };
+
+  event.waitUntil(
+      self.registration.showNotification(notificationTitle, notificationOptions)
+  );
+});
+
+// Keep service worker running in background
+self.addEventListener("install", (event) => {
+  event.waitUntil(self.skipWaiting());
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(self.clients.claim());
+});
+
+// self.addEventListener("notificationclick", function (event) {
+//   console.log("🔔 Notification Clicked NOOOO:", event.notification);
+
+//   event.notification.close();
+
+//   // ✅ Extract order_id from `data` (most reliable source)
+//   const orderId = event.notification.data?.order_id || 
+//                   (event.notification.fcmOptions?.link?.includes("orderId=") 
+//                     ? event.notification.fcmOptions.link.split("orderId=")[1] 
+//                     : null);
+
+//   event.waitUntil(
+//     clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
+//       if (clientList.length > 0) {
+//         let client = clientList[0];
+//         return client.navigate(`/active-orders?orderId=${orderId}`).then(() => client.focus());
+//       }
+//       if (orderId) {
+//         return clients.openWindow(`/active-orders?orderId=${orderId}`);
+//       }
+//       return clients.openWindow("/active-orders");
+//     })
+//   );
+// });
+
+
+self.addEventListener("notificationclick", function (event) {
+  console.log("🔔 Notification Clicked222:", event.notification);
+
+  event.notification.close(); // Close notification
+
+  // ✅ Extract order_id from the notification
+  const orderId = event.notification?.data?.order_id;
+
   event.waitUntil(
     clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
       if (clientList.length > 0) {
         let client = clientList[0];
         return client.focus();
       }
-
-      // ✅ Redirect to Active Orders with Order ID
-      return clients.openWindow("/active-orders?order_id=" + event.notification.data.order_id);
+      
+      if (orderId) {
+        console.log("✅ Opening Order: -----", orderId);
+        return clients.openWindow(`/activeOrders?orderId=${orderId}`);
+      }
+      
+      return clients.openWindow("/activeOrders"); // Default route if order ID is missing
     })
   );
 });
+

@@ -104,7 +104,7 @@ export default function Card({ initialOrder, statuses }) {
                     px-5 py-1 rounded-tl-3xl rounded-br-3xl shadow-lg shadow-gray-400/50 flex items-center 
                     gap-2 transition-all border border-green-600 hover:border-green-700">
         <FaClipboardList className="text-white text-lg drop-shadow-md hover:scale-110 transition-transform" />
-        <span className="drop-shadow-md">{order.id || 'N/A'}</span>
+        <span className="drop-shadow-md">{order.order_number || 'N/A'}</span>
       </h3>
 
 

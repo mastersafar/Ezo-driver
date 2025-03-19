@@ -27,6 +27,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   // Check for token in cookies
   const token = cookies().get("token")?.value;
+  if(token) 
+  console.log(token) ;
+
 
   return (
     <html lang="ar" dir="rtl" className={`${roboto.variable}`}>
@@ -38,6 +41,7 @@ export default function RootLayout({ children }) {
         <Toaster position="top-right" reverseOrder={false} />
 
         <NotificationHandler />
+
 
         
         {token ? (

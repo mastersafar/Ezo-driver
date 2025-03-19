@@ -10,47 +10,33 @@ export default function NotificationHandler() {
   const [userInteracted, setUserInteracted] = useState(false);
   const router = useRouter();
 
-  // ✅ Track if user interacted with the page
+  // ✅ Track user interaction to allow sound playback
   useEffect(() => {
     const handleUserInteraction = () => {
       console.log("✅ User interacted, enabling sound playback...");
       setUserInteracted(true);
     };
-    
+
     document.addEventListener("click", handleUserInteraction);
     document.addEventListener("keydown", handleUserInteraction);
-    
+
     return () => {
       document.removeEventListener("click", handleUserInteraction);
       document.removeEventListener("keydown", handleUserInteraction);
     };
   }, []);
-  
 
   useEffect(() => {
     console.log("📡 Listening for foreground notifications...");
     onMessageListener()
       .then((payload) => {
         console.log("📩 Foreground Notification:", payload);
-  
-        // ✅ Parse order data
-        let orderData = null;
-        if (payload?.data?.order) {
-          try {
-            orderData = JSON.parse(payload.data.order);
-          } catch (error) {
-            console.error("❌ Error parsing order data:", error);
-          }
-        }
-  
-        setNotification({ 
-          title: payload.notification?.title || "📢 إشعار جديد", 
-          body: payload.notification?.body || "", 
-          order: orderData 
-        });
-  
+
+        // ✅ Extract Order ID from data
+        const orderId = payload?.data?.order_id;
+
         // ✅ Show Toast Notification with Click Handling
-        toast.success(payload.notification?.title, {
+        toast.success(payload.notification?.title || "📢 إشعار جديد", {
           duration: 5000,
           position: "top-right",
           icon: "📢",
@@ -61,24 +47,37 @@ export default function NotificationHandler() {
             borderRadius: "10px",
           },
           onClick: () => {
-            if (orderData?.id) {
-              console.log("🔄 Redirecting to order:", orderData.id);
-              router.push(`/active-orders?orderId=${orderData.id}`);
+            if (orderId) {
+              console.log("🔄 Redirecting to order:", orderId);
+          
+              if (currentPath.startsWith("/activeOrders")) {
+                // ✅ Update the URL without reloading the page
+                const newUrl = `/activeOrders?orderId=${orderId}`;
+                window.history.pushState(null, "", newUrl);
+                window.dispatchEvent(new Event("orderUpdated"));
+              } else {
+                // ✅ Redirect normally if not on the page
+                router.push(`/activeOrders?orderId=${orderId}`);
+              }
             }
           },
+          
         });
-  
+
         // ✅ Play Notification Sound for Every Message
-        if (userInteracted) {
-          playNotificationSound();
-        } else {
-          console.warn("🚫 Waiting for user interaction before playing sound...");
-        }
+
         
+      
+          playNotificationSound();
+ 
+
+        // ✅ Automatically Redirect to Order After 3 Seconds (Optional)
+        setTimeout(() => {         
+            router.push(`/activeOrders?orderId=${orderId}`);          
+        }, 1500);
       })
       .catch((err) => console.error("❌ Error handling notification:", err));
   }, [userInteracted]);
-  
 
   // ✅ Function to Play Custom Sound
   const playNotificationSound = () => {
@@ -93,7 +92,6 @@ export default function NotificationHandler() {
       }
     });
   };
-  
 
   return null; // This component listens for notifications, no UI needed
 }

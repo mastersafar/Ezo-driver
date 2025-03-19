@@ -10,7 +10,7 @@ export default function Home() {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push("/login"); // Redirect to login page after 5 seconds
-    }, 5000);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, [router]);
