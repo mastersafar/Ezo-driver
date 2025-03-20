@@ -7,7 +7,7 @@ const getToken = () => {
 
 let token = Cookies.get('token');
     
-  console.log('🔑 Retrieved Token:', token);
+  // console.log('🔑 Retrieved Token:', token);
 
   return token;
 };

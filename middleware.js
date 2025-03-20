@@ -4,8 +4,8 @@ export function middleware(request) {
   const token = request.cookies.get('token'); // Retrieve the token
   const { pathname } = request.nextUrl;
 
-  console.log('Pathname:', pathname); // Debugging: Log the current path
-  console.log('Token:', token?.value); // Debugging: Log the token value
+  // console.log('Pathname:', pathname); // Debugging: Log the current path
+  // console.log('Token:', token?.value); // Debugging: Log the token value
 
 
     // Redirect unauthenticated users trying to access protected routes

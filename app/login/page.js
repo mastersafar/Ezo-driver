@@ -9,8 +9,8 @@ import { FaUser, FaLock, FaMotorcycle } from "react-icons/fa";
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function Login() {
-  const [user, setUsername] = useState("driver1");
-  const [password, setPassword] = useState("123");
+  const [user, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -77,9 +77,9 @@ export default function Login() {
   };
 
   return (
-    <div className="wrapper flex items-center justify-center min-h-screen bg-[#f6e087]">
+    <div className="wrapper flex items-center justify-center min-h-screen bg-[#70a2f3]">
       <div className="login-container bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-bold text-center text-green-700 mb-4 flex items-center justify-center">
+        <h2 className="text-2xl font-bold text-center text-green-700 mb-8 mt-3 flex items-center justify-center">
           تطبيق عزو للتوصيل <FaMotorcycle className="mr-2 text-4xl" />
         </h2>
         <form onSubmit={handleLogin}>
@@ -93,7 +93,7 @@ export default function Login() {
               onChange={(e) => setUsername(e.target.value)}
               required
               placeholder="اسم المستخدم"
-              className="w-full outline-none"
+              className="w-full px-3 outline-none"
             />
           </div>
 
@@ -107,7 +107,7 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="كلمة المرور"
-              className="w-full outline-none"
+              className="w-full px-3 outline-none"
             />
           </div>
 
@@ -115,10 +115,21 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded text-lg font-semibold hover:bg-green-700 transition"
+            className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded text-lg font-semibold  transition disabled:bg-green-700"
             disabled={loading}
           >
-            {loading ? "جاري تسجيل الدخول..." : "تسجيل الدخول"}
+          {loading ? (
+            <span className="flex justify-center gap-2">
+              <svg className="animate-spin h-5 w-5 self-center text-white" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+              </svg>
+              جاري تسجيل الدخول
+            </span>
+          ) : (
+            "تسجيل الدخول"
+          )}
+
           </button>
         </form>
 

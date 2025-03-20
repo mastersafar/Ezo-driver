@@ -41,7 +41,7 @@ export default function OrdersList() {
   };
 
   return (
-    <PageTitle title="📜 قائمة الطلبات">
+    <PageTitle title=" قائمة الطلبات">
 
       {loading && <Loader />}
 

@@ -49,7 +49,7 @@ const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const api2 = async (url, options = {}) => {
   let token = Cookies.get('token');
-  console.log('Client-side token in api2:', token);
+  // console.log('Client-side token in api2:', token);
 
   const headers = {
 
@@ -63,8 +63,8 @@ const api2 = async (url, options = {}) => {
     console.error('Token is missing, API request may fail.');
   }
 
-  console.log('Sending request to:', `${apiBaseUrl}/api${url}`);
-  console.log('Headers:', headers);
+  // console.log('Sending request to:', `${apiBaseUrl}/api${url}`);
+  // console.log('Headers:', headers);
 
   try {
     const response = await fetch(`${apiBaseUrl}/api${url}?t=${Date.now()}`, {
