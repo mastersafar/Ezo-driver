@@ -20,6 +20,7 @@ export default function AccountPage() {
     setIsRefreshing(true);
     try {
       const data = await getRequest(`/getBalance/${fromDate}/${toDate}`);
+      console.log(data);
       //const data = await getRequest(`/try`);
 
       setTransactions(data.processes);
@@ -96,7 +97,12 @@ export default function AccountPage() {
      {transactions.map((transaction, index) => (
        <tr key={index} className="text-center hover:bg-gray-100">
          <td className="border p-2">{transaction.date}</td>
-         <td className="border p-2">{transaction.process_ch}</td>
+         <td className="border p-2 text-right">
+          {transaction.process_ch} 
+          <span className=" pr-1 text-blue-500 font-bold">
+            {transaction.process_num}
+            </span>            
+         </td>
          <td className="border p-2">{transaction.daen}</td>
          <td className="border p-2">{transaction.madin}</td>
          <td className={`border p-2 font-bold ${transaction.balance < 0 ? 'text-red-500' : 'text-green-500'}`}>
